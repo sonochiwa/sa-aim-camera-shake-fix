@@ -1,0 +1,19 @@
+# Build output
+/build/
+/dist/
+
+# Local binaries copied for testing or attached to GitHub Releases
+/*.asi
+/*.dll
+/*.pdb
+/*.ilk
+/*.obj
+/*.exp
+/*.lib
+
+# Visual Studio / Windows noise
+/.vs/
+*.user
+*.suo
+Thumbs.db
+Desktop.ini
