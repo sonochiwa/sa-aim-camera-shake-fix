@@ -22,7 +22,7 @@ constexpr uint32_t kPedMatrix        = 0x14;
 constexpr uint32_t kPedVehicle       = 0x58C;
 constexpr uint32_t kPedSwimMove      = 0x53C;
 
-constexpr float kMinAimTimeStep = 0.8333333f; // 60 FPS in GTA SA timestep units.
+constexpr float kMinAimTimeStep = 1.0f; // 50 FPS in GTA SA timestep units.
 
 enum CamMode {
     MODE_SNIPER = 7,
@@ -129,14 +129,24 @@ bool IsAimCameraActive(void* cameraPtr) {
     const uintptr_t camera = reinterpret_cast<uintptr_t>(cameraPtr);
     if (camera != kTheCamera || !IsPlayerOnFoot())
         return false;
+
+    int16_t weaponMode = 0;
+    SafeRead<int16_t>(camera + kCameraWeaponMode + kQueuedModeMode, weaponMode);
+    if (IsAimMode(weaponMode) || weaponMode != 0)
+        return true;
+
     uint8_t active = 0;
     if (!SafeRead<uint8_t>(camera + kCameraActiveCam, active) || active > 2)
         return false;
-    int16_t mode = 0, weaponMode = 0;
-    const uintptr_t cam = camera + kCameraCams + static_cast<uintptr_t>(active) * kCamSize;
-    SafeRead<int16_t>(cam + kCamMode, mode);
-    SafeRead<int16_t>(camera + kCameraWeaponMode + kQueuedModeMode, weaponMode);
-    return IsAimMode(mode) || IsAimMode(weaponMode) || weaponMode != 0;
+
+    for (uint8_t i = 0; i < 3; ++i) {
+        int16_t mode = 0;
+        const uintptr_t cam = camera + kCameraCams + static_cast<uintptr_t>(i) * kCamSize;
+        if (SafeRead<int16_t>(cam + kCamMode, mode) && IsAimMode(mode))
+            return true;
+    }
+
+    return false;
 }
 
 void BeginGuard() {
