@@ -19,8 +19,8 @@ constexpr uint32_t kCamSize          = 0x238;
 constexpr uint32_t kCamMode          = 0x0C;
 constexpr uint32_t kQueuedModeMode   = 0x00;
 constexpr uint32_t kPedMatrix        = 0x14;
-constexpr uint32_t kPedVehicle       = 0x58C;
-constexpr uint32_t kPedSwimMove      = 0x53C;
+// pedFlags bit 0 = bInVehicle; CPed::m_pVehicle can stay set after exit.
+constexpr uint32_t kPedFlagsInVehicle = 0x46D;
 
 constexpr float kMinAimTimeStep = 1.0f; // 50 FPS in GTA SA timestep units.
 
@@ -96,11 +96,10 @@ uintptr_t PlayerPed() {
 bool IsPlayerOnFoot() {
     const uintptr_t ped = PlayerPed();
     if (!ped) return false;
-    uintptr_t veh = 0;
-    uint8_t swimMove = 0;
-    SafeRead<uintptr_t>(ped + kPedVehicle, veh);
-    SafeRead<uint8_t>(ped + kPedSwimMove, swimMove);
-    return veh == 0 && swimMove == 0;
+    uint8_t flags = 0;
+    if (!SafeRead<uint8_t>(ped + kPedFlagsInVehicle, flags))
+        return false;
+    return (flags & 1) == 0;
 }
 
 bool IsAimMode(int mode) {

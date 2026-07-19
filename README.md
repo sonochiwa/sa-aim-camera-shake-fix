@@ -38,6 +38,10 @@ Test target:
 The plugin checks the game image base before installing hooks. Other executable
 versions are not enabled by default.
 
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md).
+
 ## Source
 
 The repository contains the source code and documentation. Compiled `.asi`
