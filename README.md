@@ -38,10 +38,23 @@ Test target:
 The plugin checks the game image base before installing hooks. Other executable
 versions are not enabled by default.
 
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md).
+
 ## Source
 
 The repository contains the source code and documentation. Compiled `.asi`
 builds are published separately through GitHub Releases.
+
+## Building
+
+1. Open `AimCameraShakeFix.sln` in Visual Studio 2022 or newer.
+2. Build the `Release|Win32` configuration.
+3. The plugin is written to `build\AimCameraShakeFix.asi`.
+
+MinHook is vendored in `vendor/minhook` and is compiled as part of the
+project.
 
 ## Technical Notes
 
@@ -61,3 +74,9 @@ Created by sonochiwa.
 
 If this fix helped you, consider starring the repository and sharing a before /
 after video with a link to the original release page.
+
+## License
+
+SA Aim Camera Shake Fix is released under the [MIT License](LICENSE). MinHook
+is included under its own BSD-style license in
+[`vendor/minhook/LICENSE.txt`](vendor/minhook/LICENSE.txt).
